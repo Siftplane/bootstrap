@@ -1,0 +1,355 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Values",
+  "type": "object",
+  "properties": {
+    "installation": {
+      "$ref": "#/definitions/Options"
+    },
+    "runner": {
+      "$ref": "#/definitions/RunnerOptions"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "installation",
+    "runner"
+  ],
+  "definitions": {
+    "AgentCapacity": {
+      "type": "object",
+      "properties": {
+        "cpu_millis": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 2000,
+          "minimum": 100
+        },
+        "memory_mib": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 256
+        },
+        "replicas": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 3,
+          "minimum": 1
+        },
+        "scratch_mib": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 256
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "replicas",
+        "cpu_millis",
+        "memory_mib",
+        "scratch_mib"
+      ]
+    },
+    "Cidr": {
+      "type": "string",
+      "maxLength": 49,
+      "minLength": 4,
+      "pattern": "^(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])/([1-9]|[12][0-9]|3[0-2])|[0-9a-f:.]*:[0-9a-f:.]*/([1-9]|[1-9][0-9]|1[01][0-9]|12[0-8]))$"
+    },
+    "Endpoint": {
+      "type": "object",
+      "properties": {
+        "network": {
+          "$ref": "#/definitions/NetworkDestination"
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 9,
+          "pattern": "^https://([A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9a-fA-F:]+\\])(:[1-9][0-9]{0,4})?/?$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "network"
+      ]
+    },
+    "FoundationOptions": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "api_server_cidrs": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Cidr"
+              },
+              "maxItems": 16,
+              "minItems": 1
+            },
+            "capacity": {
+              "$ref": "#/definitions/GuardCapacity"
+            },
+            "mode": {
+              "type": "string",
+              "const": "create"
+            },
+            "namespace": {
+              "type": "string",
+              "maxLength": 63,
+              "minLength": 1,
+              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+            },
+            "tls_secret": {
+              "type": "string",
+              "maxLength": 253,
+              "minLength": 1,
+              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "namespace",
+            "tls_secret",
+            "api_server_cidrs",
+            "capacity"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "installed_by": {
+              "type": "string",
+              "maxLength": 63,
+              "minLength": 1,
+              "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+            },
+            "mode": {
+              "type": "string",
+              "const": "reuse"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "installed_by"
+          ]
+        }
+      ]
+    },
+    "GuardCapacity": {
+      "type": "object",
+      "properties": {
+        "cpu_millis": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 2000,
+          "minimum": 100
+        },
+        "memory_mib": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 2048,
+          "minimum": 256
+        },
+        "replicas": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 3,
+          "minimum": 2
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "replicas",
+        "cpu_millis",
+        "memory_mib"
+      ]
+    },
+    "NetworkDestination": {
+      "type": "object",
+      "properties": {
+        "cidrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cidr"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "port": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "cidrs",
+        "port"
+      ]
+    },
+    "OpaqueId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+    },
+    "Options": {
+      "type": "object",
+      "properties": {
+        "agent_capacity": {
+          "$ref": "#/definitions/AgentCapacity"
+        },
+        "agent_tls_secret": {
+          "type": "string",
+          "maxLength": 253,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+        },
+        "authority_incarnation": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "deployment_id": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "dns_cidrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cidr"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "foundation": {
+          "$ref": "#/definitions/FoundationOptions"
+        },
+        "ingress_cidrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cidr"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "installation_id": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "kubernetes": {
+          "$ref": "#/definitions/Endpoint"
+        },
+        "lifetime_seconds": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 3600,
+          "minimum": 60
+        },
+        "namespace": {
+          "type": "string",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+        },
+        "plane": {
+          "$ref": "#/definitions/Plane"
+        },
+        "region": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "schema_version": {
+          "$ref": "#/definitions/V1"
+        },
+        "telemetry": {
+          "$ref": "#/definitions/Endpoint"
+        },
+        "telemetry_buffer": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 2
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "installation_id",
+        "deployment_id",
+        "authority_incarnation",
+        "plane",
+        "namespace",
+        "region",
+        "foundation",
+        "agent_tls_secret",
+        "agent_capacity",
+        "kubernetes",
+        "telemetry",
+        "telemetry_buffer",
+        "dns_cidrs",
+        "ingress_cidrs",
+        "lifetime_seconds"
+      ]
+    },
+    "Plane": {
+      "type": "string",
+      "enum": [
+        "workspace",
+        "document"
+      ]
+    },
+    "RunnerOptions": {
+      "type": "object",
+      "properties": {
+        "cpu_millis": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 2000,
+          "minimum": 250
+        },
+        "memory_mib": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 512
+        },
+        "registry": {
+          "description": "Includes the registry and any explicitly trusted token/blob origins from the release.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkDestination"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "registry_ca_secret": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 253,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+        },
+        "scratch_mib": {
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 65536,
+          "minimum": 1024
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "cpu_millis",
+        "memory_mib",
+        "scratch_mib",
+        "registry"
+      ]
+    },
+    "V1": {
+      "type": "integer",
+      "const": 1
+    }
+  }
+}

@@ -1,0 +1,13 @@
+The bootstrap Job is {{ include "bootstrap.name" . }} in {{ .Release.Namespace }}.
+Observe its status and JSON result with kubectl get job and kubectl logs.
+Successful completion installs the shared foundation and the selected deployment agent.
+Control-plane enrollment and application installation are separate agent operations.
+
+This is an initial-installation chart. It rejects Helm upgrades. Do not use Helm
+rollback or reinstall to repair a retained operation. Recover the original Job
+and its durable journal with the original settings and release.
+
+Helm uninstall retains the Job, input records and installation grants for recovery;
+it does not cancel the operation or revoke its authority. The installer revokes its
+temporary grant on completion or bounded cleanup. If no Pod ever starts, or cleanup
+cannot reach Kubernetes, an administrator must recover the original operation.

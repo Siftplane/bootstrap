@@ -1,0 +1,105 @@
+{{- $name := include "bootstrap.name" . -}}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+automountServiceAccountToken: false
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ $name }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+rules: {{ .Files.Get "initial-rules.json" }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $name }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: {{ $name }}}
+subjects:
+  - {kind: ServiceAccount, name: {{ $name }}, namespace: {{ .Release.Namespace }}}
+---
+# Retained metadata cleanup only. Namespace UPDATE is resource-scoped; Kubernetes RBAC
+# cannot restrict it to one annotation. The installer preserves unrelated annotations.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ $name }}-cleanup
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: [namespaces]
+    resourceNames: [kube-system, {{ .Release.Namespace | quote }}, {{ .Values.installation.namespace | quote }}]
+    verbs: [get]
+  - apiGroups: [""]
+    resources: [namespaces]
+    resourceNames: [kube-system]
+    verbs: [update]
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [clusterroles]
+    resourceNames: [{{ $name }}]
+    verbs: [get]
+  - apiGroups: [rbac.authorization.k8s.io]
+    resources: [clusterrolebindings]
+    resourceNames: [{{ $name }}]
+    verbs: [get, delete]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $name }}-cleanup
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: ClusterRole, name: {{ $name }}-cleanup}
+subjects:
+  - {kind: ServiceAccount, name: {{ $name }}, namespace: {{ .Release.Namespace }}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $name }}-cleanup
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: [configmaps]
+    resourceNames: [{{ $name }}]
+    verbs: [get, update]
+  - apiGroups: [""]
+    resources: [serviceaccounts]
+    resourceNames: [{{ $name }}]
+    verbs: [get]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ $name }}-cleanup
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+roleRef: {apiGroup: rbac.authorization.k8s.io, kind: Role, name: {{ $name }}-cleanup}
+subjects:
+  - {kind: ServiceAccount, name: {{ $name }}, namespace: {{ .Release.Namespace }}}

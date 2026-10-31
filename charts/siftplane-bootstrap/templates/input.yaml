@@ -1,0 +1,38 @@
+{{- include "bootstrap.validate" . -}}
+{{- $name := include "bootstrap.name" . -}}
+{{- $release := .Files.Get "release.json" | fromJson -}}
+{{- if .Values.runner.registry_ca_secret -}}
+{{- $_ := set $release.registry "ca_file" "/bootstrap/registry-ca/ca.crt" -}}
+{{- end }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}-input
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+immutable: true
+data:
+  options.json: |-
+    {{- toJson .Values.installation | nindent 4 }}
+  context.json: |-
+    {{- include "bootstrap.context" . | nindent 4 }}
+  release.json: |-
+    {{- toJson $release | nindent 4 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $name }}-package
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+immutable: true
+binaryData:
+  {{- range $path, $_ := .Files.Glob "package/**" }}
+  {{ trimPrefix "package/" $path | replace "/" "--" | quote }}: {{ $.Files.Get $path | b64enc | quote }}
+  {{- end }}

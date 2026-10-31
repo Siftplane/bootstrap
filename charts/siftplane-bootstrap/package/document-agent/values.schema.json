@@ -1,0 +1,307 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AgentValues",
+  "type": "object",
+  "properties": {
+    "action_generation": {
+      "description": "Accepted maintenance generation, rendered on every object so same-version repairs\nstill pass through this action's guarded writer and produce current completion evidence.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/DecimalU64"
+        }
+      ]
+    },
+    "agent_version": {
+      "$ref": "#/definitions/ReleaseVersion"
+    },
+    "capacity": {
+      "$ref": "#/definitions/AgentCapacity"
+    },
+    "dns_cidrs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Cidr"
+      },
+      "maxItems": 16,
+      "minItems": 1
+    },
+    "document_policy": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/DocumentPolicy"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "identity": {
+      "$ref": "#/definitions/AgentIdentity"
+    },
+    "image": {
+      "$ref": "#/definitions/PinnedImage"
+    },
+    "image_pull_secrets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 4
+    },
+    "ingress_cidrs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Cidr"
+      },
+      "maxItems": 16,
+      "minItems": 1
+    },
+    "kubernetes": {
+      "$ref": "#/definitions/Endpoint"
+    },
+    "region": {
+      "$ref": "#/definitions/OpaqueId"
+    },
+    "schema_version": {
+      "$ref": "#/definitions/V1"
+    },
+    "telemetry": {
+      "$ref": "#/definitions/Endpoint"
+    },
+    "telemetry_buffer": {
+      "type": "integer",
+      "format": "uint16",
+      "maximum": 4096,
+      "minimum": 2
+    },
+    "tls_secret": {
+      "type": "string",
+      "maxLength": 253,
+      "minLength": 1,
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "action_generation",
+    "identity",
+    "agent_version",
+    "image",
+    "tls_secret",
+    "image_pull_secrets",
+    "region",
+    "kubernetes",
+    "telemetry",
+    "telemetry_buffer",
+    "dns_cidrs",
+    "ingress_cidrs",
+    "capacity"
+  ],
+  "definitions": {
+    "AgentCapacity": {
+      "type": "object",
+      "properties": {
+        "cpu_millis": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 2000,
+          "minimum": 100
+        },
+        "memory_mib": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 256
+        },
+        "replicas": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 3,
+          "minimum": 1
+        },
+        "scratch_mib": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 4096,
+          "minimum": 256
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "replicas",
+        "cpu_millis",
+        "memory_mib",
+        "scratch_mib"
+      ]
+    },
+    "AgentIdentity": {
+      "type": "object",
+      "properties": {
+        "agent_id": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "authority_incarnation": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "cluster_uid": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "credential_generation": {
+          "$ref": "#/definitions/DecimalU64"
+        },
+        "deployment_id": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "installation_id": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "namespace_uid": {
+          "$ref": "#/definitions/OpaqueId"
+        },
+        "plane": {
+          "$ref": "#/definitions/Plane"
+        },
+        "schema_version": {
+          "$ref": "#/definitions/V1"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "agent_id",
+        "installation_id",
+        "deployment_id",
+        "plane",
+        "cluster_uid",
+        "namespace",
+        "namespace_uid",
+        "authority_incarnation",
+        "credential_generation"
+      ]
+    },
+    "Cidr": {
+      "type": "string",
+      "maxLength": 49,
+      "minLength": 4,
+      "pattern": "^(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])/([1-9]|[12][0-9]|3[0-2])|[0-9a-f:.]*:[0-9a-f:.]*/([1-9]|[1-9][0-9]|1[01][0-9]|12[0-8]))$"
+    },
+    "DecimalU64": {
+      "type": "string",
+      "maxLength": 20,
+      "pattern": "^(0|[1-9][0-9]{0,18}|1[0-7][0-9]{18}|18[0-3][0-9]{17}|184[0-3][0-9]{16}|1844[0-5][0-9]{15}|18446[0-6][0-9]{14}|184467[0-3][0-9]{13}|1844674[0-3][0-9]{12}|184467440[0-6][0-9]{10}|1844674407[0-2][0-9]{9}|18446744073[0-6][0-9]{8}|1844674407370[0-8][0-9]{6}|18446744073709[0-4][0-9]{5}|184467440737095[0-4][0-9]{4}|18446744073709550[0-9]{3}|18446744073709551[0-5][0-9]{2}|1844674407370955160[0-9]{1}|1844674407370955161[0-4]|18446744073709551615)$"
+    },
+    "DocumentPolicy": {
+      "type": "object",
+      "properties": {
+        "destinations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NetworkDestination"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "secret": {
+          "type": "string",
+          "maxLength": 253,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "secret",
+        "destinations"
+      ]
+    },
+    "Endpoint": {
+      "type": "object",
+      "properties": {
+        "network": {
+          "$ref": "#/definitions/NetworkDestination"
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 9,
+          "pattern": "^https://([A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9a-fA-F:]+\\])(:[1-9][0-9]{0,4})?/?$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "network"
+      ]
+    },
+    "NetworkDestination": {
+      "type": "object",
+      "properties": {
+        "cidrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cidr"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "port": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "cidrs",
+        "port"
+      ]
+    },
+    "OpaqueId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+    },
+    "PinnedImage": {
+      "type": "object",
+      "properties": {
+        "digest": {
+          "$ref": "#/definitions/Sha256"
+        },
+        "repository": {
+          "type": "string",
+          "maxLength": 512,
+          "minLength": 3,
+          "pattern": "^[a-z0-9._-]+(:([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?(/[a-z0-9._-]+)+$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "digest"
+      ]
+    },
+    "Plane": {
+      "type": "string",
+      "enum": [
+        "workspace",
+        "document"
+      ]
+    },
+    "ReleaseVersion": {
+      "description": "Stable releases use three numeric components; prerelease channels require their own schema.",
+      "type": "string"
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "V1": {
+      "type": "integer",
+      "const": 1
+    }
+  }
+}

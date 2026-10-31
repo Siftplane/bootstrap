@@ -1,0 +1,197 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FoundationValues",
+  "type": "object",
+  "properties": {
+    "api_server_cidrs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Cidr"
+      },
+      "maxItems": 16,
+      "minItems": 1
+    },
+    "ca_certificate": {
+      "description": "Public certificate only. Private signing and server keys never enter Helm values/history.",
+      "type": "string",
+      "maxLength": 16384,
+      "minLength": 64,
+      "pattern": "^-----BEGIN CERTIFICATE-----\\n[A-Za-z0-9+/=\\n]+\\n-----END CERTIFICATE-----\\n?$"
+    },
+    "capacity": {
+      "$ref": "#/definitions/GuardCapacity"
+    },
+    "cluster_uid": {
+      "$ref": "#/definitions/OpaqueId"
+    },
+    "dns_cidrs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Cidr"
+      },
+      "maxItems": 16,
+      "minItems": 1
+    },
+    "image": {
+      "$ref": "#/definitions/PinnedImage"
+    },
+    "image_pull_secrets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "maxItems": 4
+    },
+    "kubernetes": {
+      "$ref": "#/definitions/Endpoint"
+    },
+    "namespace": {
+      "type": "string",
+      "maxLength": 63,
+      "minLength": 1,
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    },
+    "schema_version": {
+      "$ref": "#/definitions/V1"
+    },
+    "tls_secret": {
+      "type": "string",
+      "maxLength": 253,
+      "minLength": 1,
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+    },
+    "version": {
+      "$ref": "#/definitions/ReleaseVersion"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "namespace",
+    "cluster_uid",
+    "version",
+    "image",
+    "image_pull_secrets",
+    "tls_secret",
+    "ca_certificate",
+    "kubernetes",
+    "dns_cidrs",
+    "api_server_cidrs",
+    "capacity"
+  ],
+  "definitions": {
+    "Cidr": {
+      "type": "string",
+      "maxLength": 49,
+      "minLength": 4,
+      "pattern": "^(((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])/([1-9]|[12][0-9]|3[0-2])|[0-9a-f:.]*:[0-9a-f:.]*/([1-9]|[1-9][0-9]|1[01][0-9]|12[0-8]))$"
+    },
+    "Endpoint": {
+      "type": "object",
+      "properties": {
+        "network": {
+          "$ref": "#/definitions/NetworkDestination"
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 9,
+          "pattern": "^https://([A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?|\\[[0-9a-fA-F:]+\\])(:[1-9][0-9]{0,4})?/?$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "network"
+      ]
+    },
+    "GuardCapacity": {
+      "type": "object",
+      "properties": {
+        "cpu_millis": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 2000,
+          "minimum": 100
+        },
+        "memory_mib": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 2048,
+          "minimum": 256
+        },
+        "replicas": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 3,
+          "minimum": 2
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "replicas",
+        "cpu_millis",
+        "memory_mib"
+      ]
+    },
+    "NetworkDestination": {
+      "type": "object",
+      "properties": {
+        "cidrs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Cidr"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        },
+        "port": {
+          "type": "integer",
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "cidrs",
+        "port"
+      ]
+    },
+    "OpaqueId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,128}$"
+    },
+    "PinnedImage": {
+      "type": "object",
+      "properties": {
+        "digest": {
+          "$ref": "#/definitions/Sha256"
+        },
+        "repository": {
+          "type": "string",
+          "maxLength": 512,
+          "minLength": 3,
+          "pattern": "^[a-z0-9._-]+(:([1-9][0-9]{0,3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?(/[a-z0-9._-]+)+$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "digest"
+      ]
+    },
+    "ReleaseVersion": {
+      "description": "Stable releases use three numeric components; prerelease channels require their own schema.",
+      "type": "string"
+    },
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "V1": {
+      "type": "integer",
+      "const": 1
+    }
+  }
+}

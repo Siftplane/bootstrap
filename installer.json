@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source": {
+    "source_commit": "3ca0b06bd755b26d26711b3979a7973c347be92d",
+    "git_tree": "7e510539815c1784fa7e19e1bc607f9810322afd",
+    "source_tree_sha256": "7c745a934fa5069bcc34cdcfd251657dfb875a5d0e062c04c328f76c924b365b",
+    "archive_sha256": "79adc246d23ecccdfd8952f8ab61759be941541fd7f0f24d2ca111e963f21ba1"
+  },
+  "version": "0.1.0",
+  "bootstrap_image": {
+    "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/images/siftplane-bootstrap",
+    "digest": "bb9460fce1cb07a232d8653761817d6f32dae0df0de3736a4f2822684951eeb4"
+  },
+  "chart_path": "siftplane-bootstrap-0.1.0.tgz",
+  "chart": {
+    "sha256": "8c4a10a198a3fb733c1b0d5b079fa94230d2292dca68fe63f841c0ab71621aed",
+    "bytes": 80420
+  },
+  "package": {
+    "sha256": "3eac42022b76da3811cd45b42871ed5010e43b49a7b015511d724734d0b1e16f",
+    "bytes": 3712
+  }
+}

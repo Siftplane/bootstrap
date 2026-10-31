@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "bootstrap.name" . }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ include "bootstrap.name" . }}
+  policyTypes: [Ingress, Egress]
+  ingress: []
+  egress:
+    - to:
+        {{- range .Values.installation.dns_cidrs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports: [{port: 53, protocol: UDP}, {port: 53, protocol: TCP}]
+    {{- range append .Values.runner.registry .Values.installation.kubernetes.network }}
+    - to:
+        {{- range .cidrs }}
+        - ipBlock: {cidr: {{ . | quote }}}
+        {{- end }}
+      ports: [{port: {{ .port }}, protocol: TCP}]
+    {{- end }}

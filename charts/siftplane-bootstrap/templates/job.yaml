@@ -1,0 +1,100 @@
+{{- $name := include "bootstrap.name" . -}}
+{{- $release := .Files.Get "release.json" | fromJson -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    {{- include "bootstrap.keep" . | nindent 4 }}
+  labels:
+    {{- include "bootstrap.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 3
+  # Preparation and operation each have a bounded budget. SIGTERM cleanup needs 120s.
+  activeDeadlineSeconds: {{ add (mul .Values.installation.lifetime_seconds 2) 150 }}
+  template:
+    metadata:
+      labels:
+        {{- include "bootstrap.labels" . | nindent 8 }}
+      annotations:
+        deployment.siftplane.com/context-sha256: {{ include "bootstrap.context" . | sha256sum | quote }}
+    spec:
+      serviceAccountName: {{ $name }}
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      terminationGracePeriodSeconds: 130
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: installer
+          image: {{ printf "%s@sha256:%s" $release.bootstrap_image.repository $release.bootstrap_image.digest | quote }}
+          imagePullPolicy: IfNotPresent
+          command: ["/usr/local/bin/siftplane-bootstrap"]
+          args: ["customer-install", "--context", "/bootstrap/input/context.json", "--config", "/bootstrap/input/options.json", "--release", "/bootstrap/input/release.json", "--package", "/bootstrap/package"]
+          env:
+            - name: SIFTPLANE_BOOTSTRAP_SERVICE_ACCOUNT
+              valueFrom: {fieldRef: {fieldPath: spec.serviceAccountName}}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests:
+              cpu: {{ printf "%vm" .Values.runner.cpu_millis }}
+              memory: {{ printf "%vMi" .Values.runner.memory_mib }}
+              ephemeral-storage: {{ printf "%vMi" .Values.runner.scratch_mib }}
+            limits:
+              cpu: {{ printf "%vm" .Values.runner.cpu_millis }}
+              memory: {{ printf "%vMi" .Values.runner.memory_mib }}
+              ephemeral-storage: {{ printf "%vMi" .Values.runner.scratch_mib }}
+          volumeMounts:
+            - {name: input, mountPath: /bootstrap/input, readOnly: true}
+            - {name: package, mountPath: /bootstrap/package, readOnly: true}
+            - {name: pod, mountPath: /bootstrap/pod, readOnly: true}
+            - {name: identity, mountPath: /var/run/secrets/kubernetes.io/serviceaccount, readOnly: true}
+            - {name: scratch, mountPath: /tmp}
+            {{- if .Values.runner.registry_ca_secret }}
+            - {name: registry-ca, mountPath: /bootstrap/registry-ca, readOnly: true}
+            {{- end }}
+      volumes:
+        - name: input
+          configMap: {name: {{ $name }}-input, defaultMode: 0444}
+        - name: package
+          configMap:
+            name: {{ $name }}-package
+            defaultMode: 0444
+            items:
+              {{- range $path, $_ := .Files.Glob "package/**" }}
+              - key: {{ trimPrefix "package/" $path | replace "/" "--" | quote }}
+                path: {{ trimPrefix "package/" $path | quote }}
+              {{- end }}
+        - name: pod
+          downwardAPI:
+            defaultMode: 0444
+            items:
+              - path: context-sha256
+                fieldRef: {fieldPath: "metadata.annotations['deployment.siftplane.com/context-sha256']"}
+        - name: identity
+          projected:
+            defaultMode: 0440
+            sources:
+              - serviceAccountToken: {path: token, expirationSeconds: 600}
+              - configMap:
+                  name: kube-root-ca.crt
+                  items: [{key: ca.crt, path: ca.crt}]
+              - downwardAPI:
+                  items: [{path: namespace, fieldRef: {fieldPath: metadata.namespace}}]
+        - name: scratch
+          emptyDir: {sizeLimit: {{ printf "%vMi" .Values.runner.scratch_mib }}}
+        {{- if .Values.runner.registry_ca_secret }}
+        - name: registry-ca
+          secret:
+            secretName: {{ .Values.runner.registry_ca_secret | quote }}
+            defaultMode: 0444
+            items: [{key: ca.crt, path: ca.crt}]
+        {{- end }}

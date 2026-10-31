@@ -1,0 +1,7 @@
+{
+  "agent_version": "0.1.0",
+  "image": {
+    "digest": "3488952fa09613044bb7a1d664fe16308936de7bb137cf5357606b6e4afe0dd3",
+    "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/images/deployment-agent"
+  }
+}

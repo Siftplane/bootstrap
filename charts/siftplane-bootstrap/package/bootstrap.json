@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "source": {
+    "source_commit": "3ca0b06bd755b26d26711b3979a7973c347be92d",
+    "git_tree": "7e510539815c1784fa7e19e1bc607f9810322afd",
+    "source_tree_sha256": "7c745a934fa5069bcc34cdcfd251657dfb875a5d0e062c04c328f76c924b365b",
+    "archive_sha256": "79adc246d23ecccdfd8952f8ab61759be941541fd7f0f24d2ca111e963f21ba1"
+  },
+  "publications": {
+    "document-agent": {
+      "release_digest": "e8e66bebf935fca0e05fd2ecadbdd6ef0303493ac70841fed97388e50fcc3d44",
+      "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/releases",
+      "completion": {
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "digest": "sha256:84c9900ee4fec99a6f8f241a802b2515b8170e1e5ff7b9188f0ae73d81b4cfc2",
+        "size": 433
+      },
+      "anonymous_readback": true
+    },
+    "foundation": {
+      "release_digest": "562e85382c1600d8bdecae5511eebb93d16e15969fdb420d469696bc4cc5022f",
+      "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/releases",
+      "completion": {
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "digest": "sha256:ca43b2930f9e20d1007333ee8cf612c7fc6dabb9a7d3519f7df4fa62f9ef7b75",
+        "size": 433
+      },
+      "anonymous_readback": true
+    },
+    "workspace-agent": {
+      "release_digest": "65b15fccc70bb48c54acec3b3f341fc6830671ff9d631f8dc619c6343a1fe2be",
+      "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/releases",
+      "completion": {
+        "mediaType": "application/vnd.oci.image.manifest.v1+json",
+        "digest": "sha256:54c774431b81cc43bb26ae3fb2064f27eb87c8dbdaf0f8e245613e91e53c94dc",
+        "size": 433
+      },
+      "anonymous_readback": true
+    }
+  },
+  "files": {
+    "document-agent/chart.tgz": {
+      "sha256": "94d740f6bd37842935c10addd6f069f374be74c56f2794e3cf6568863208bd78",
+      "bytes": 4698
+    },
+    "document-agent/release-values.json": {
+      "sha256": "33d22889b8dd5ae680a0ed092795ebc6d97d1fb13f1191764ebd851b687cfd3e",
+      "bytes": 218
+    },
+    "document-agent/release.json": {
+      "sha256": "4ec83244de12a6f7dea6b5c1736b48a5ca37e012185ef01d9cf67802dd3ebea6",
+      "bytes": 3935
+    },
+    "document-agent/values.schema.json": {
+      "sha256": "9f1207b7cdea3acf5661d385f5c15f28675079cf1d613f8c02919b167788fbc3",
+      "bytes": 7700
+    },
+    "foundation/chart.tgz": {
+      "sha256": "772d31051dbed6e10d9244cae355804919e914aa57e826990323e482d40374d9",
+      "bytes": 53437
+    },
+    "foundation/release-values.json": {
+      "sha256": "23722613e8b199b217858d312cba22047a73f1c18d3c0fa39f463be2b22428cf",
+      "bytes": 211
+    },
+    "foundation/release.json": {
+      "sha256": "94a9c2f3ff97fb89f9866eca25d7f42c306ac823672f35b51892390376289a45",
+      "bytes": 4112
+    },
+    "foundation/values.schema.json": {
+      "sha256": "d1faa7a84fbf264a544d845a6926492d8af635a56dfd2afd50d837c375154b0b",
+      "bytes": 4781
+    },
+    "workspace-agent/chart.tgz": {
+      "sha256": "94d740f6bd37842935c10addd6f069f374be74c56f2794e3cf6568863208bd78",
+      "bytes": 4698
+    },
+    "workspace-agent/release-values.json": {
+      "sha256": "33d22889b8dd5ae680a0ed092795ebc6d97d1fb13f1191764ebd851b687cfd3e",
+      "bytes": 218
+    },
+    "workspace-agent/release.json": {
+      "sha256": "8832d3ba156bbb4549cdb26199f86a18692c10a9611a07d2a9e90eb6a9c758f2",
+      "bytes": 3948
+    },
+    "workspace-agent/values.schema.json": {
+      "sha256": "9f1207b7cdea3acf5661d385f5c15f28675079cf1d613f8c02919b167788fbc3",
+      "bytes": 7700
+    }
+  },
+  "bootstrap_image": {
+    "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/images/siftplane-bootstrap",
+    "digest": "bb9460fce1cb07a232d8653761817d6f32dae0df0de3736a4f2822684951eeb4"
+  }
+}
