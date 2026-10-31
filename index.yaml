@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   siftplane-bootstrap:
   - apiVersion: v2
+    created: "2026-10-31T12:55:22.524153876-07:00"
+    digest: c545704ec6e0fa2502f392f9cd3f55a101e25871041aa9ed7135f73962b099e5
+    kubeVersion: '>=1.31.0-0'
+    name: siftplane-bootstrap
+    type: application
+    urls:
+    - https://github.com/Siftplane/bootstrap/releases/download/v0.1.1/siftplane-bootstrap-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     created: "2026-10-31T09:32:45.92406641-07:00"
     digest: 8c4a10a198a3fb733c1b0d5b079fa94230d2292dca68fe63f841c0ab71621aed
     kubeVersion: '>=1.31.0-0'
@@ -10,4 +19,4 @@ entries:
     urls:
     - https://github.com/Siftplane/bootstrap/releases/download/v0.1.0/siftplane-bootstrap-0.1.0.tgz
     version: 0.1.0
-generated: "2026-10-31T09:32:45.922220167-07:00"
+generated: "2026-10-31T12:55:22.522413081-07:00"

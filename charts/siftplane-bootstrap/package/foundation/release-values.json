@@ -1,7 +1,7 @@
 {
   "image": {
-    "digest": "646eb1eaa8f0f5700cff95269ae874e2055fd66f974bff5ce71ed2aa07f5ff54",
+    "digest": "83dc1b2ac2f71d25fffd559dbc1defedb3d531bbdf991b8ba978429e7af5a83f",
     "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/images/siftplane-guard"
   },
-  "version": "0.1.0"
+  "version": "0.1.1"
 }

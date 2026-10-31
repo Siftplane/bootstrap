@@ -1,38 +1,38 @@
 {
   "schema_version": 1,
   "source": {
-    "source_commit": "3ca0b06bd755b26d26711b3979a7973c347be92d",
-    "git_tree": "7e510539815c1784fa7e19e1bc607f9810322afd",
-    "source_tree_sha256": "7c745a934fa5069bcc34cdcfd251657dfb875a5d0e062c04c328f76c924b365b",
-    "archive_sha256": "79adc246d23ecccdfd8952f8ab61759be941541fd7f0f24d2ca111e963f21ba1"
+    "source_commit": "984674894f922b211d1b47d148237ab2a17f82d0",
+    "git_tree": "bf0777926b338ab6684fbaa596398feb83308ef4",
+    "source_tree_sha256": "cbeefdee5ca1e8270920de383211dbffa15869af72c043da1320e1293fd7dc4e",
+    "archive_sha256": "5e735e28bc37f53feda77e451733522e5912eb7d33fd43605d5475a78512f1d0"
   },
   "publications": {
     "document-agent": {
-      "release_digest": "e8e66bebf935fca0e05fd2ecadbdd6ef0303493ac70841fed97388e50fcc3d44",
+      "release_digest": "538c230b510b72f3890b8fa9689b7d81cf7d5e8430d50c030859dce9a370ed91",
       "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/releases",
       "completion": {
         "mediaType": "application/vnd.oci.image.manifest.v1+json",
-        "digest": "sha256:84c9900ee4fec99a6f8f241a802b2515b8170e1e5ff7b9188f0ae73d81b4cfc2",
+        "digest": "sha256:02dc4d397d376ed2c975e6b7a2da4231eab3f5c5808a19b9b777d567a1fbea95",
         "size": 433
       },
       "anonymous_readback": true
     },
     "foundation": {
-      "release_digest": "562e85382c1600d8bdecae5511eebb93d16e15969fdb420d469696bc4cc5022f",
+      "release_digest": "b88e4c232a783faa01fc433dd24c437e56215b6cf724a4266b9689ff852fef61",
       "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/releases",
       "completion": {
         "mediaType": "application/vnd.oci.image.manifest.v1+json",
-        "digest": "sha256:ca43b2930f9e20d1007333ee8cf612c7fc6dabb9a7d3519f7df4fa62f9ef7b75",
+        "digest": "sha256:bb4a67782ad5592e73ca3f5c9667100ecc5c3fd9f372ff695c770c252146babe",
         "size": 433
       },
       "anonymous_readback": true
     },
     "workspace-agent": {
-      "release_digest": "65b15fccc70bb48c54acec3b3f341fc6830671ff9d631f8dc619c6343a1fe2be",
+      "release_digest": "86a892318707092bd2dc2070201fe46a21f9ffb8e1ab002f403d9f5fdb4002b9",
       "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/releases",
       "completion": {
         "mediaType": "application/vnd.oci.image.manifest.v1+json",
-        "digest": "sha256:54c774431b81cc43bb26ae3fb2064f27eb87c8dbdaf0f8e245613e91e53c94dc",
+        "digest": "sha256:e0994276ffcc0b4cb362c59f372222c58a5955fb02b3773acee8c5441f68bbc9",
         "size": 433
       },
       "anonymous_readback": true
@@ -40,48 +40,48 @@
   },
   "files": {
     "document-agent/chart.tgz": {
-      "sha256": "94d740f6bd37842935c10addd6f069f374be74c56f2794e3cf6568863208bd78",
-      "bytes": 4698
+      "sha256": "36cc323c522fdf1e24fc9fb7b787a5421eead3a7e4c68b762985c46a04d64d05",
+      "bytes": 4699
     },
     "document-agent/release-values.json": {
-      "sha256": "33d22889b8dd5ae680a0ed092795ebc6d97d1fb13f1191764ebd851b687cfd3e",
+      "sha256": "455a253ffe6dcfc200b965b35a5f5304fbdb14657d4d6cc0a0c9cdc84bcd0569",
       "bytes": 218
     },
     "document-agent/release.json": {
-      "sha256": "4ec83244de12a6f7dea6b5c1736b48a5ca37e012185ef01d9cf67802dd3ebea6",
-      "bytes": 3935
+      "sha256": "78850136378dfd1135b4337c467339b309b104a248fadadc610516ed6c659e11",
+      "bytes": 4034
     },
     "document-agent/values.schema.json": {
       "sha256": "9f1207b7cdea3acf5661d385f5c15f28675079cf1d613f8c02919b167788fbc3",
       "bytes": 7700
     },
     "foundation/chart.tgz": {
-      "sha256": "772d31051dbed6e10d9244cae355804919e914aa57e826990323e482d40374d9",
-      "bytes": 53437
+      "sha256": "3792ec20d93c8e062b245df9a5f8c50ba4ada115f42ccacaf531cf549db11cf8",
+      "bytes": 53438
     },
     "foundation/release-values.json": {
-      "sha256": "23722613e8b199b217858d312cba22047a73f1c18d3c0fa39f463be2b22428cf",
+      "sha256": "b3910e5bcb3dd32154a3f4e0a7af3f1b23392388152850dd5cb3480971c0499d",
       "bytes": 211
     },
     "foundation/release.json": {
-      "sha256": "94a9c2f3ff97fb89f9866eca25d7f42c306ac823672f35b51892390376289a45",
-      "bytes": 4112
+      "sha256": "1943c8eee9e57becf0e38bbbedbbc737ecd50ae7192f7988205cac1bc3bf714b",
+      "bytes": 4211
     },
     "foundation/values.schema.json": {
       "sha256": "d1faa7a84fbf264a544d845a6926492d8af635a56dfd2afd50d837c375154b0b",
       "bytes": 4781
     },
     "workspace-agent/chart.tgz": {
-      "sha256": "94d740f6bd37842935c10addd6f069f374be74c56f2794e3cf6568863208bd78",
-      "bytes": 4698
+      "sha256": "36cc323c522fdf1e24fc9fb7b787a5421eead3a7e4c68b762985c46a04d64d05",
+      "bytes": 4699
     },
     "workspace-agent/release-values.json": {
-      "sha256": "33d22889b8dd5ae680a0ed092795ebc6d97d1fb13f1191764ebd851b687cfd3e",
+      "sha256": "455a253ffe6dcfc200b965b35a5f5304fbdb14657d4d6cc0a0c9cdc84bcd0569",
       "bytes": 218
     },
     "workspace-agent/release.json": {
-      "sha256": "8832d3ba156bbb4549cdb26199f86a18692c10a9611a07d2a9e90eb6a9c758f2",
-      "bytes": 3948
+      "sha256": "10655220471ad9441763ef8d56ed88961af1aeafd3754bbdbf741781374d61e6",
+      "bytes": 4047
     },
     "workspace-agent/values.schema.json": {
       "sha256": "9f1207b7cdea3acf5661d385f5c15f28675079cf1d613f8c02919b167788fbc3",
@@ -90,6 +90,6 @@
   },
   "bootstrap_image": {
     "repository": "public.ecr.aws/j7a4d9l9/siftplane-bootstrap/images/siftplane-bootstrap",
-    "digest": "bb9460fce1cb07a232d8653761817d6f32dae0df0de3736a4f2822684951eeb4"
+    "digest": "c38bfdd6278112d08f452de832fc9d7bfcabf85921ac33a5147a595aec94c5e6"
   }
 }
